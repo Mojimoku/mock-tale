@@ -1,0 +1,677 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap");
+@import "tailwindcss";
+
+/*
+  mock/tale — neumorphic design system.
+  Sleek, matte, modern: soft-extruded/pressed surfaces on a neutral base,
+  translucency used only as a targeted accent (header, FAB), coral reserved
+  for brand/primary actions, pastels reserved for category coding.
+*/
+
+:root {
+  --base: #e8e6e1;
+  --base-light: #f5f3ef;
+  --base-mid: #ddd9d2;
+  --base-dark: #c9c4bb;
+
+  --ink: #2e2b28;
+  --ink-soft: #6b665f;
+  --ink-faint: #9c968c;
+
+  --coral: #ff5a75;
+  --coral-light: #ffb9c6;
+  --coral-dark: #c93a56;
+
+  /* category coding — the only place besides coral that carries color */
+  --cat-basic: #d8d5ce;
+  --cat-basic-ink: #5b5850;
+  --cat-beerwine: #f5cd7e;
+  --cat-beerwine-ink: #8a6416;
+  --cat-mocktail: #dccffa;
+  --cat-mocktail-ink: #5b4a8c;
+  --cat-signature: #c8eedd;
+  --cat-signature-ink: #2e7a5d;
+
+  /* neumorphic shadow pairs, tuned against --base */
+  --shadow-raised: -6px -6px 12px rgba(255, 255, 255, 0.75), 6px 6px 14px rgba(163, 157, 145, 0.4);
+  --shadow-raised-sm: -3px -3px 6px rgba(255, 255, 255, 0.7), 3px 3px 8px rgba(163, 157, 145, 0.35);
+  --shadow-raised-lg: -8px -8px 18px rgba(255, 255, 255, 0.75), 8px 10px 22px rgba(163, 157, 145, 0.45);
+  --shadow-pressed: inset -4px -4px 8px rgba(255, 255, 255, 0.6), inset 4px 4px 10px rgba(163, 157, 145, 0.45);
+  --shadow-pressed-sm: inset -2px -2px 4px rgba(255, 255, 255, 0.6), inset 2px 2px 6px rgba(163, 157, 145, 0.4);
+  /* coral-tinted, for surfaces that are themselves coral */
+  --shadow-coral: -4px -4px 10px rgba(255, 255, 255, 0.35), 4px 6px 14px rgba(201, 58, 86, 0.4);
+  --shadow-coral-pressed: inset -3px -3px 6px rgba(255, 176, 190, 0.4), inset 3px 4px 8px rgba(150, 30, 55, 0.45);
+
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Space Grotesk", "Inter", system-ui, sans-serif;
+
+  /* Total height of the bottom tab bar, incl. its own padding — pages under
+     it pad their bottom by this much (plus a bit more), and the FAB sits
+     just above it rather than overlapping. */
+  --tabbar-height: calc(4.25rem + env(safe-area-inset-bottom, 0px));
+
+  color-scheme: light;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overscroll-behavior-y: none;
+  background-color: var(--base-dark);
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  appearance: textfield;
+}
+
+.font-display {
+  font-family: var(--font-display);
+  font-weight: 700;
+}
+
+/* ---------------------------------------------------------------------- */
+/* App shell.                                                             */
+/* ---------------------------------------------------------------------- */
+
+.nu-app {
+  min-height: 100dvh;
+  background: var(--base-dark);
+  display: flex;
+  justify-content: center;
+}
+
+.nu-page {
+  width: 100%;
+  max-width: 26rem;
+  min-height: 100dvh;
+  background: var(--base);
+  position: relative;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.08);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Headers — the one place translucency shows up as an accent.            */
+/* ---------------------------------------------------------------------- */
+
+.nu-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  padding: 1.1rem 1.25rem 0.9rem;
+  background: color-mix(in srgb, var(--base) 82%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6), 0 6px 16px rgba(163, 157, 145, 0.18);
+}
+
+.nu-header-plain {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  padding: 1.1rem 1.25rem 0.9rem;
+  background: color-mix(in srgb, var(--base) 82%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6), 0 6px 16px rgba(163, 157, 145, 0.18);
+}
+
+.nu-subtitle {
+  color: var(--ink-soft);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Wordmark. Brand mark (∅) is now a flat SVG graphic — see BrandMark.tsx. */
+/* ---------------------------------------------------------------------- */
+
+.nu-wordmark {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+
+.nu-wordmark-mark {
+  color: var(--coral);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Cards.                                                                 */
+/* ---------------------------------------------------------------------- */
+
+.nu-card {
+  background: var(--base);
+  border-radius: 16px;
+  box-shadow: var(--shadow-raised);
+  transition: box-shadow 0.15s ease, transform 0.1s ease;
+}
+.nu-card:active {
+  box-shadow: var(--shadow-raised-sm);
+  transform: translateY(1px);
+}
+
+/* A "pressed slot" affordance for add/empty prompts. */
+.nu-card-dashed {
+  background: var(--base);
+  border-radius: 16px;
+  box-shadow: var(--shadow-pressed-sm);
+  color: var(--ink-soft);
+}
+
+.nu-card-pin::before {
+  content: "";
+  position: absolute;
+  left: 1.1rem;
+  top: 1.1rem;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--coral);
+  box-shadow: var(--shadow-raised-sm);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Inputs — pressed into the surface, a natural fit for neumorphism.      */
+/* ---------------------------------------------------------------------- */
+
+.nu-input {
+  width: 100%;
+  background: var(--base);
+  border: none;
+  border-radius: 12px;
+  color: var(--ink);
+  box-shadow: var(--shadow-pressed-sm);
+  padding: 0.65rem 0.8rem;
+  font-family: var(--font-sans);
+}
+.nu-input::placeholder {
+  color: var(--ink-faint);
+}
+.nu-input:focus {
+  outline: none;
+  box-shadow: var(--shadow-pressed-sm), 0 0 0 2px var(--coral-light);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Buttons.                                                               */
+/* ---------------------------------------------------------------------- */
+
+.nu-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  border: none;
+  border-radius: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: box-shadow 0.12s ease, transform 0.08s ease;
+}
+.nu-btn:active {
+  transform: translateY(1px);
+}
+.nu-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.nu-btn-primary {
+  background: var(--coral);
+  color: #fff;
+  box-shadow: var(--shadow-coral);
+}
+.nu-btn-primary:active {
+  box-shadow: var(--shadow-coral-pressed);
+}
+
+.nu-btn-ghost {
+  background: var(--base);
+  color: var(--ink-soft);
+  box-shadow: var(--shadow-raised-sm);
+}
+.nu-btn-ghost:active {
+  box-shadow: var(--shadow-pressed-sm);
+}
+
+.nu-btn-danger {
+  background: var(--coral-dark);
+  color: #fff;
+  box-shadow: -4px -4px 10px rgba(255, 255, 255, 0.3), 4px 6px 14px rgba(120, 30, 48, 0.4);
+}
+.nu-btn-danger:active {
+  box-shadow: inset -3px -3px 6px rgba(255, 176, 190, 0.25), inset 3px 4px 8px rgba(90, 20, 35, 0.45);
+}
+
+/* Floating action button — translucent coral, the other accent surface.
+   Sits above the tab bar (calc'd so it still works on pages without one,
+   like the drink form, since --tabbar-height is a fixed constant either way). */
+.nu-fab {
+  position: fixed;
+  bottom: calc(var(--tabbar-height) + 1rem);
+  right: 1.5rem;
+  z-index: 20;
+  width: 3.75rem;
+  height: 3.75rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background: color-mix(in srgb, var(--coral) 88%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-coral);
+  transition: box-shadow 0.12s ease, transform 0.08s ease;
+}
+.nu-fab:active {
+  box-shadow: var(--shadow-coral-pressed);
+  transform: translateY(1px);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Bottom tab bar — the app's top-level mode switch (Restaurants/Drinks/  */
+/* Pantry). Frosted like the header, fixed to the viewport, centered to   */
+/* the same phone-width column as the page content behind it.            */
+/* ---------------------------------------------------------------------- */
+
+.nu-tabbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 15;
+  display: flex;
+  justify-content: center;
+}
+
+.nu-tabbar-inner {
+  width: 100%;
+  max-width: 26rem;
+  display: flex;
+  background: color-mix(in srgb, var(--base) 88%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.6), 0 -6px 16px rgba(163, 157, 145, 0.18);
+  padding: 0.5rem 0.5rem calc(0.5rem + env(safe-area-inset-bottom, 0px));
+}
+
+.nu-tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.35rem 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--ink-faint);
+  text-decoration: none;
+  font-size: 0.68rem;
+  font-weight: 600;
+}
+
+.nu-tab-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 10px;
+  transition: background 0.12s ease, box-shadow 0.12s ease;
+}
+
+.nu-tab[aria-current="page"] {
+  color: var(--coral-dark);
+}
+.nu-tab[aria-current="page"] .nu-tab-icon-wrap {
+  background: color-mix(in srgb, var(--coral) 16%, var(--base));
+  box-shadow: var(--shadow-pressed-sm);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Category badges — flat/low-shadow, pastel-only, never coral.           */
+/* ---------------------------------------------------------------------- */
+
+.nu-badge {
+  --cat: var(--cat-basic);
+  --cat-ink: var(--cat-basic-ink);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.22rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--cat-ink);
+  background: var(--cat);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+.nu-badge[data-category="basic"] {
+  --cat: var(--cat-basic);
+  --cat-ink: var(--cat-basic-ink);
+}
+.nu-badge[data-category="alcohol-free-beer-wine"] {
+  --cat: var(--cat-beerwine);
+  --cat-ink: var(--cat-beerwine-ink);
+}
+.nu-badge[data-category="mocktail-program"] {
+  --cat: var(--cat-mocktail);
+  --cat-ink: var(--cat-mocktail-ink);
+}
+.nu-badge[data-category="house-specialty"] {
+  --cat: var(--cat-signature);
+  --cat-ink: var(--cat-signature-ink);
+}
+
+.nu-badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--cat-ink);
+  opacity: 0.55;
+}
+
+/* Toggleable variant used by the filter bar. */
+.nu-badge-btn {
+  border: none;
+  cursor: pointer;
+  background: var(--base);
+  color: var(--ink-soft);
+  box-shadow: var(--shadow-raised-sm);
+}
+.nu-badge-btn[data-category="basic"] {
+  --cat: var(--cat-basic);
+  --cat-ink: var(--cat-basic-ink);
+}
+.nu-badge-btn[data-category="alcohol-free-beer-wine"] {
+  --cat: var(--cat-beerwine);
+  --cat-ink: var(--cat-beerwine-ink);
+}
+.nu-badge-btn[data-category="mocktail-program"] {
+  --cat: var(--cat-mocktail);
+  --cat-ink: var(--cat-mocktail-ink);
+}
+.nu-badge-btn[data-category="house-specialty"] {
+  --cat: var(--cat-signature);
+  --cat-ink: var(--cat-signature-ink);
+}
+.nu-badge-btn[aria-pressed="true"] {
+  background: var(--cat);
+  color: var(--cat-ink);
+  box-shadow: var(--shadow-pressed-sm);
+}
+
+/* Bigger tile used by the category picker in the drink form. */
+.nu-coaster {
+  --cat: var(--cat-basic);
+  --cat-ink: var(--cat-basic-ink);
+  position: relative;
+  text-align: left;
+  border: none;
+  border-radius: 14px;
+  padding: 0.75rem 0.85rem;
+  cursor: pointer;
+  background: var(--base);
+  box-shadow: var(--shadow-raised-sm);
+  transition: box-shadow 0.12s ease;
+}
+.nu-coaster[data-category="basic"] {
+  --cat: var(--cat-basic);
+  --cat-ink: var(--cat-basic-ink);
+}
+.nu-coaster[data-category="alcohol-free-beer-wine"] {
+  --cat: var(--cat-beerwine);
+  --cat-ink: var(--cat-beerwine-ink);
+}
+.nu-coaster[data-category="mocktail-program"] {
+  --cat: var(--cat-mocktail);
+  --cat-ink: var(--cat-mocktail-ink);
+}
+.nu-coaster[data-category="house-specialty"] {
+  --cat: var(--cat-signature);
+  --cat-ink: var(--cat-signature-ink);
+}
+.nu-coaster[aria-checked="true"] {
+  box-shadow: var(--shadow-pressed-sm), 0 0 0 2px var(--cat);
+  background: color-mix(in srgb, var(--cat) 30%, var(--base));
+}
+.nu-coaster-medallion {
+  width: 1.1rem;
+  height: 1.1rem;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: var(--cat);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Flavor tag chips — raised when off, pressed + coral when selected.     */
+/* ---------------------------------------------------------------------- */
+
+.nu-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--ink-soft);
+  background: var(--base);
+  box-shadow: var(--shadow-raised-sm);
+}
+
+.nu-chip-btn {
+  border: none;
+  cursor: pointer;
+  transition: box-shadow 0.1s ease;
+}
+.nu-chip-btn[aria-pressed="true"] {
+  background: var(--coral);
+  color: #fff;
+  box-shadow: var(--shadow-coral-pressed);
+}
+
+/* NA brand/product tags — informational, stays neutral. */
+.nu-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.22rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  color: var(--ink-soft);
+  background: var(--base);
+  box-shadow: var(--shadow-raised-sm);
+}
+
+/* Off-menu indicator — a small coral chip, no more ink-stamp motif. */
+.nu-chip-accent {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.18rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--coral-dark);
+  background: color-mix(in srgb, var(--coral) 16%, var(--base));
+}
+
+/* ---------------------------------------------------------------------- */
+/* Rating stars + slider.                                                 */
+/* ---------------------------------------------------------------------- */
+
+.nu-star-empty {
+  color: var(--base-dark);
+}
+
+.nu-rating-number {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--ink);
+  font-size: 0.9rem;
+}
+
+.nu-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--base);
+  box-shadow: var(--shadow-pressed-sm);
+  cursor: pointer;
+}
+.nu-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--coral);
+  box-shadow: var(--shadow-raised-sm);
+  border: none;
+  margin-top: -8px;
+}
+.nu-slider::-moz-range-thumb {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--coral);
+  box-shadow: var(--shadow-raised-sm);
+  border: none;
+}
+.nu-slider::-moz-range-track {
+  height: 10px;
+  border-radius: 999px;
+  background: transparent;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Toggle switch.                                                         */
+/* ---------------------------------------------------------------------- */
+
+.nu-toggle-track {
+  width: 2.6rem;
+  height: 1.5rem;
+  border-radius: 999px;
+  background: var(--base);
+  box-shadow: var(--shadow-pressed-sm);
+  position: relative;
+  flex-shrink: 0;
+}
+.nu-toggle-knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  background: var(--base-light);
+  box-shadow: var(--shadow-raised-sm);
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+.nu-toggle-track[data-on="true"] .nu-toggle-knob {
+  background: var(--coral);
+  transform: translateX(1.1rem);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Icon buttons (filter toggle, sign-out).                                */
+/* ---------------------------------------------------------------------- */
+
+.nu-icon-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 12px;
+  flex-shrink: 0;
+  border: none;
+  cursor: pointer;
+  background: var(--base);
+  color: var(--ink-soft);
+  box-shadow: var(--shadow-raised-sm);
+  transition: box-shadow 0.12s ease;
+}
+.nu-icon-btn[aria-pressed="true"] {
+  color: var(--coral-dark);
+  box-shadow: var(--shadow-pressed-sm);
+}
+.nu-icon-btn-count {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.1rem;
+  height: 1.1rem;
+  border-radius: 50%;
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: #fff;
+  background: var(--coral);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Misc.                                                                  */
+/* ---------------------------------------------------------------------- */
+
+.nu-filter-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-faint);
+}
+
+.nu-divider {
+  height: 0;
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.6);
+  border-bottom: 1px solid rgba(163, 157, 145, 0.3);
+}
+
+.nu-empty-icon {
+  border-radius: 50%;
+  background: var(--base);
+  box-shadow: var(--shadow-raised);
+  color: var(--ink-faint);
+}
+
+.nu-shimmer {
+  background: linear-gradient(100deg, var(--base-mid) 30%, var(--base-light) 50%, var(--base-mid) 70%);
+  background-size: 200% 100%;
+  animation: nu-shimmer 1.4s ease-in-out infinite;
+  border-radius: 8px;
+}
+@keyframes nu-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
